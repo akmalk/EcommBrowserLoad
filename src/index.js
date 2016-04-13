@@ -4,8 +4,10 @@ var _ = require('lodash');
 var winston = require('winston');
 var rumBeacon = require('./browserRumBeacon');
 var session = require('./sessionData');
+var eumUtilities = require('eum-utilities');
 var beaconTransforms = {};
 var jsErrors = {};
+
 
 
 /*************************
@@ -24,6 +26,23 @@ var logFileName = host.replace('http://','') + '-' + process.pid + '-' + Date.no
 /**************************
  * ECOMMERCE VARIABLES
  *************************/
+var addToCartItems = function(form) {
+    var f = _.random(1,14);
+    var s = _.random(1,14);
+
+    if (f == s) {
+        s+=1;
+    } else if (f > s) {
+        var t = f;
+        f = s;
+        s = t;
+    }
+
+    var r = _.rangeRight(f,s).reduce( (result, value) => value + ',' + result);
+    form.selectedItemId = r;
+    return form;
+}
+
 var pages = [
     {
         url : host + '/appdynamicspilot/',
@@ -156,14 +175,19 @@ var nextStep = function(steps, jar, sessionData) {
         url : currentPage.url,
         jar : jar,
         headers : {
-            'ADRUM' : 'isAjax:true'
+            'ADRUM' : 'isAjax:true',
+            'ADRUM_1' : 'isMobile:true'
         }
     };
     var method = 'get';
 
     if (currentPage.form) {
         var method = 'post';
-        options.form = currentPage.form;
+        if (currentPage.url.indexOf('!addToCart.action') > -1) {
+            options.form = addToCartItems(currentPage.form);
+        } else {
+            options.form = currentPage.form;
+        }
     }
 
     if (currentPage.headers) {
@@ -303,11 +327,7 @@ var getSession = function() {
 }
 
 var getCorrelation = function(headers) {
-    return _(headers).filter(function(value, key) {
-        return key.indexOf('adrum') > -1;
-    }).map(function(value) {
-        return value.split(':');
-    }).fromPairs().value();
+    return eumUtilities.correlationHeaders(headers);
 }
 
 var updateCorrelationInfo = function(beacon, correlationInfo) {
@@ -316,17 +336,17 @@ var updateCorrelationInfo = function(beacon, correlationInfo) {
         return;
     }
 
-    if (correlationInfo.g) {
-        beacon.es[0].sm.cg = correlationInfo.g;
+    if (correlationInfo.clientRequestGUID) {
+        beacon.gs[0] = correlationInfo.clientRequestGUID;
     }
-    if (correlationInfo.n) {
-        beacon.es[0].sm.btgan = correlationInfo.n;
+    if (correlationInfo.globalAccountName) {
+        beacon.es[0].sm.btgan = correlationInfo.globalAccountName;
     }
-    if (correlationInfo.i) {
-        beacon.es[0].sm.bt[0].id = correlationInfo.i;
+    if (correlationInfo.btId) {
+        beacon.es[0].sm.bt[0].id = correlationInfo.btId;
     }
-    if (correlationInfo.e) {
-        beacon.es[0].sm.bt[0].ert = correlationInfo.e;
+    if (correlationInfo.btERT) {
+        beacon.es[0].sm.bt[0].ert = correlationInfo.btERT;
     }
 }
 

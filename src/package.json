@@ -4,6 +4,7 @@
   "description": "Browser RUM load with Sessions",
   "main": "index.js",
   "dependencies": {
+    "eum-utilities": "^0.1.0",
     "lodash": "^4.5.1",
     "q": "^1.4.1",
     "request": "^2.69.0",
