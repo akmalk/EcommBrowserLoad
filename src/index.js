@@ -431,3 +431,14 @@ request(host + '/appdynamicspilot/rest/json/user/all', function(err,resp,body) {
     users = JSON.parse(body);
     begin(getPages, numberOfActiveSessions);
 });
+
+setInterval(function() {
+  request(host + "/appdynamicspilot/Order.action", function(err, resp, body) {
+    if (err) {
+      logger.error("Thread contention url errored out");
+      logger.error(err);
+      return;
+    }
+    logger.info("Thread contention url called successfully");
+  })
+}, 2000);
