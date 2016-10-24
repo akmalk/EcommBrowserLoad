@@ -2,7 +2,7 @@ FROM centos:latest
 
 RUN \
     yum update -y && yum install -y wget && \
-    wget https://nodejs.org/download/release/latest-v4.x/node-v4.6.0-linux-x64.tar.gz && \
+    wget https://nodejs.org/download/release/latest-v4.x/node-v4.6.1-linux-x64.tar.gz && \
     tar --strip-components 1 -zxvf node-v* -C /usr/local
 
 RUN npm install -g forever
