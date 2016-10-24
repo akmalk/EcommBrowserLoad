@@ -15,6 +15,7 @@ var jsErrors = {};
  ************************/
 var host = process.env.ECOMM_URL;
 var beaconHost = process.env.EUM_URL;
+var beaconHostName = beaconHost.replace(/^(https?):\/\//,'');
 var appDKey =  process.env.EUM_KEY;
 var numberOfActiveSessions = process.env.ACTIVE_SESSIONS || 5;
 var debugConsole = process.env.DEBUG_CONSOLE || false;
@@ -391,7 +392,7 @@ var sendBeacon = function(beacon, agent) {
             'Content-Type' : 'text/plain',
             'Content-Length' : strBeacon.length,
             'Accept' : '*/*',
-            'Host' : 'col.eum-appdynamics.com'
+            'Host' : beaconHostName
         },
         body : strBeacon
     }
