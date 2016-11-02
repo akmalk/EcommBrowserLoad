@@ -53,43 +53,43 @@ var getPagesForSession = function() {
 
   return [
     {
-      url : "http://localhost/appdynamicspilot/",
+      url : appBaseUrl + "/appdynamicspilot/",
       drop : 0,
       beacon : "getHomepage",
     },
     {
-      url : "http://localhost/appdynamicspilot/UserLogin.action",
+      url : appBaseUrl + "/appdynamicspilot/UserLogin.action",
       drop : 0,
       form : {loginName : loginName, password : password}
     },
     {
-        url : 'http://localhost/appdynamicspilot/ViewItems.action',
+        url : appBaseUrl + '/appdynamicspilot/ViewItems.action',
         drop : 5,
         beacon : "getFetchCatalog",
     },
     {
-        url : 'http://localhost/appdynamicspilot/ViewCart!addToCart.action',
+        url : appBaseUrl + '/appdynamicspilot/ViewCart!addToCart.action',
         form : cartForm,
         drop : 5,
         beacon : "getAddToCart"
     },
     {
-        url : 'http://localhost/appdynamicspilot/ViewCart!address.action',
+        url : appBaseUrl + '/appdynamicspilot/ViewCart!address.action',
         drop : 5,
         beacon : "getAddress"
     },
     {
-        url : 'http://localhost/appdynamicspilot/ViewCart!paymentinfo.action',
+        url : appBaseUrl + '/appdynamicspilot/ViewCart!paymentinfo.action',
         drop : 5,
         beacon : "getPayment"
     },
     {
-        url : 'http://localhost/appdynamicspilot/ViewCart!confirmorder.action',
+        url : appBaseUrl + '/appdynamicspilot/ViewCart!confirmorder.action',
         drop : 5,
         beacon : "getConfirmOrder"
     },
     {
-        url : 'http://localhost/appdynamicspilot/ViewCart!sendItems.action',
+        url : appBaseUrl + '/appdynamicspilot/ViewCart!sendItems.action',
         form : {
             username : loginName
         },
@@ -116,7 +116,7 @@ if (!appBaseUrl || !beaconHost || !brumKey) {
   logger.error("One of the required environment variables was not set");
   setTimeout(function() {process.exit();}, 500);
 } else {
-  request("http://localhost/appdynamicspilot/rest/json/user/all", function(err,resp,body) {
+  request(appBaseUrl + "/appdynamicspilot/rest/json/user/all", function(err,resp,body) {
     if (err) {
       return logger.error("Error fetching users, cannot start", err);
     }
@@ -125,4 +125,3 @@ if (!appBaseUrl || !beaconHost || !brumKey) {
 
   });
 }
-
