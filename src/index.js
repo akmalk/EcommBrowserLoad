@@ -89,6 +89,9 @@ var getPagesForSession = function() {
         beacon : "getConfirmOrder"
     },
     {
+        url : appBaseUrl + '/appdynamicspilot/Order.action'
+    },
+    {
         url : appBaseUrl + '/appdynamicspilot/ViewCart!sendItems.action',
         form : {
             username : loginName
